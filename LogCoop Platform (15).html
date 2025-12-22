@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogCoop - Платформа логистической кооперации</title>
+    <style>
+        :root {
+            --color-primary: #2180 8d;
+            --color-primary-hover: #1d7473;
+            --color-primary-active: #1a6873;
+            --color-background: #fcfcf9;
+            --color-surface: #ffffff;
+            --color-text: #134252;
+            --color-text-secondary: #626c71;
+            --color-border: #ae5240;
+            --color-success: #208c8d;
+            --color-error: #c01530;
+            --color-warning: #a84b2f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--color-background);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--color-surface);
+            border-bottom: 1px solid rgba(174, 82, 64, 0.15);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--color-primary);
+            text-decoration: none;
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        nav a {
+            color: var(--color-text);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--color-primary);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: #000;
+            box-shadow: 0 2px 8px rgba(33, 128, 141, 0.3);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--color-primary-hover);
+            box-shadow: 0 4px 12px rgba(33, 128, 141, 0.4);
+        }
+
+        .btn-primary:active {
+            background-color: var(--color-primary-active);
+            box-shadow: 0 1px 4px rgba(33, 128, 141, 0.2);
+        }
+
+        .btn-secondary {
+            background-color: rgba(174, 82, 64, 0.12);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(174, 82, 64, 0.2);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .hero {
+            padding: 80px 20px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(33, 128, 141, 0.05) 0%, rgba(175, 82, 64, 0.05) 100%);
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: var(--color-text);
+            font-weight: 600;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--color-text-secondary);
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 80px 20px;
+        }
+
+        .feature-card {
+            background-color: var(--color-surface);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid rgba(174, 82, 64, 0.15);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border-color: rgba(33, 128, 141, 0.3);
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(33, 128, 141, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 16px;
+        }
+
+        .feature-card h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: var(--color-text);
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+            margin-bottom: 0;
+        }
+
+        .stats-section {
+            background-color: var(--color-text);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .stat-item h4 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .stat-item p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .dashboard-section {
+            padding: 80px 20px;
+            background-color: var(--color-background);
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .dashboard-header h2 {
+            font-size: 36px;
+            margin-bottom: 16px;
+        }
+
+        .dashboard-header p {
+            font-size: 16px;
+            color: var(--color-text-secondary);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .dashboard-tabs {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(174, 82, 64, 0.2);
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            color: var(--color-primary);
+            border-bottom-color: var(--color-primary);
+        }
+
+        .tab-content {
+            display: none;
+            background-color: var(--color-surface);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid rgba(174, 82, 64, 0.15);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .order-form {
+            display: grid;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--color-text);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px;
+            border: 1px solid rgba(174, 82, 64, 0.2);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--color-primary);
+        }
+
+        .products-list {
+            display: grid;
+            gap: 16px;
+        }
+
+        .product-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            background-color: var(--color-background);
+            border-radius: 8px;
+            border: 1px solid rgba(174, 82, 64, 0.1);
+        }
+
+        .product-info h4 {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .product-info p {
+            font-size: 12px;
+            color: var(--color-text-secondary);
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .product-actions input {
+            width: 60px;
+            padding: 6px;
+            border: 1px solid rgba(174, 82, 64, 0.2);
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-success {
+            background-color: rgba(32, 140, 141, 0.15);
+            color: var(--color-success);
+        }
+
+        .status-pending {
+            background-color: rgba(168, 75, 47, 0.15);
+            color: var(--color-warning);
+        }
+
+        .status-delivered {
+            background-color: rgba(32, 140, 141, 0.15);
+            color: var(--color-success);
+        }
+
+        .order-history {
+            display: grid;
+            gap: 12px;
+        }
+
+        .order-card {
+            background-color: var(--color-background);
+            padding: 16px;
+            border-radius: 8px;
+            border-left: 4px solid var(--color-primary);
+        }
+
+        .order-card-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .order-card h4 {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .order-card-date {
+            font-size: 12px;
+            color: var(--color-text-secondary);
+        }
+
+        .order-card-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--color-text-secondary);
+        }
+
+        .cta-section {
+            padding: 60px 20px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(33, 128, 141, 0.08) 0%, rgba(175, 82, 64, 0.08) 100%);
+        }
+
+        .cta-section h2 {
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+
+        .cta-section p {
+            font-size: 16px;
+            color: var(--color-text-secondary);
+            margin-bottom: 30px;
+        }
+
+        footer {
+            background-color: var(--color-text);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .success-message {
+            display: none;
+            background-color: rgba(32, 140, 141, 0.1);
+            color: var(--color-success);
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--color-success);
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }        .btn {
+            width: 100%;
+            }
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .nav-item {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .nav-item.active {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: var(--color-primary);
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo">LogCoop</a>
+            <nav>
+                <a class="nav-item active" onclick="showSection('home')">Главная</a>
+                <a class="nav-item" onclick="showSection('features')">Возможности</a>
+                <a class="nav-item" onclick="showSection('order')">Заказ</a>
+                <a class="nav-item" onclick="showSection('dashboard')">Дашборд</a>
+                <a class="nav-item" onclick="showSection('profile')">Профиль</a>
+                <a class="nav-item" onclick="showSection('about')">О нас</a>
+                <button class="btn btn-primary" onclick="showLoginForm()">Вход</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Home Section -->
+    <section id="home" class="section active">
+        <section class="hero">
+            <div class="container">
+                <h1>Экономия на масштабе для вашего бизнеса</h1>
+                <p>Объединитесь с другими ресторанами и кафе, получите оптовые цены на закупки и снизьте затраты на доставку на 25-30%</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="showSection('order')">Начать заказ</button>
+                    <button class="btn btn-secondary" onclick="showSection('features')">Узнать больше</button>
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="section">
+        <div class="feature-grid container">
+        <div class="feature-card">
+            <div class="feature-icon">📦</div>
+            <h3>Консолидированные закупки</h3>
+            <p>Автоматически объединяем заказы от множества МСП для получения оптовых скидок от поставщиков</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🚚</div>
+            <h3>Оптимизированная логистика</h3>
+            <p>Централизованная доставка на кросс-док, затем распределение по оптимизированным маршрутам</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">💰</div>
+            <h3>Снижение затрат</h3>
+            <p>Гарантированная экономия 15-20% на стоимости доставки при масштабировании</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3>Полная прозрачность</h3>
+            <p>Отслеживайте все заказы в реальном времени с детальной информацией о статусе</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🔄</div>
+            <h3>Гибкие условия</h3>
+            <p>Выбирайте между разовыми заказами или подпиской на регулярные доставки со скидкой</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🤝</div>
+            <h3>B2B сообщество</h3>
+            <p>Присоединитесь к сети из 479 ресторанов и кафе Новгородской области</p>
+        </div>
+    </section>
+
+    <!-- About Section with Stats -->
+    <section id="about" class="section">
+        <section class="stats-section">
+            <div class="container">
+                <h2>Почему выбирают LogCoop</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h4>420 млн ₽</h4>
+                    <p>Потенциальная годовая экономия в регионе</p>
+                </div>
+                <div class="stat-item">
+                    <h4>25-30%</h4>
+                    <p>Снижение Cost per Stop</p>
+                </div>
+                <div class="stat-item">
+                    <h4>479</h4>
+                    <p>МСП в нашей сети</p>
+                </div>
+                <div class="stat-item">
+                    <h4>85%</h4>
+                    <p>Целевой OTIF (качество доставки)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="section">
+        <section class="dashboard-section">
+        <div class="container">
+            <div class="dashboard-header">
+                <h2>Как это работает</h2>
+                <p>Интерфейс платформы сделан простым и понятным для быстрого начала работы</p>
+            </div>
+
+            <div class="dashboard-tabs">
+                <button class="tab-btn active" onclick="switchTab('products')">Доступные товары</button>
+            </div>
+
+            <!-- Products Tab -->
+            <div id="products" class="tab-content active">
+                <div class="products-list">
+                    <div class="product-item">
+                        <div class="product-info">
+                            <h4>🍅 Томаты свежие</h4>
+                            <p>Цена: 85 ₽/кг | Мин. партия: 10 кг</p>
+                        </div>
+                        <div class="product-actions">
+                            <input type="number" min="0" value="0" placeholder="кг">
+                            <button class="btn btn-secondary" style="padding: 8px 16px;">Добавить</button>
+                        </div>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-info">
+                            <h4>🥒 Огурцы свежие</h4>
+                            <p>Цена: 70 ₽/кг | Мин. партия: 10 кг</p>
+                        </div>
+                        <div class="product-actions">
+                            <input type="number" min="0" value="0" placeholder="кг">
+                            <button class="btn btn-secondary" style="padding: 8px 16px;">Добавить</button>
+                        </div>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-info">
+                            <h4>🧅 Лук репчатый</h4>
+                            <p>Цена: 35 ₽/кг | Мин. партия: 20 кг</p>
+                        </div>
+                        <div class="product-actions">
+                            <input type="number" min="0" value="0" placeholder="кг">
+                            <button class="btn btn-secondary" style="padding: 8px 16px;">Добавить</button>
+                        </div>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-info">
+                            <h4>🥔 Картофель</h4>
+                            <p>Цена: 25 ₽/кг | Мин. партия: 50 кг</p>
+                        </div>
+                        <div class="product-actions">
+                            <input type="number" min="0" value="0" placeholder="кг">
+                            <button class="btn btn-secondary" style="padding: 8px 16px;">Добавить</button>
+                        </div>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-info">
+                            <h4>🍚 Рис</h4>
+                            <p>Цена: 45 ₽/кг | Мин. партия: 10 кг</p>
+                        </div>
+                        <div class="product-actions">
+                            <input type="number" min="0" value="0" placeholder="кг">
+                            <button class="btn btn-secondary" style="padding: 8px 16px;">Добавить</button>
+                        </div>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-info">
+                            <h4>🥚 Яйцо куриное</h4>
+                            <p>Цена: 8 ₽/шт | Мин. партия: 360 шт (10 кг)</p>
+                        </div>
+                        <div class="product-actions">
+                            <input type="number" min="0" value="0" placeholder="шт">
+                            <button class="btn btn-secondary" style="padding: 8px 16px;">Добавить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            </div>
+        </div>
+    </section>
+    </section>
+
+    <!-- Profile Section -->
+    <section id="profile" class="section">
+        <section class="dashboard-section">
+            <div class="container">
+                <div class="dashboard-header">
+                    <h2>Мой профиль</h2>
+                    <p>Управляйте информацией вашего профиля и просмотрите статистику заказов</p>
+                </div>
+                <div style="max-width: 800px; margin: 0 auto; margin-bottom: 50px;">
+                    <div style="background-color: var(--color-surface); padding: 30px; border-radius: 12px; border: 1px solid rgba(174, 82, 64, 0.15); margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h3 style="margin: 0;">Информация профиля</h3>
+                            <button class="btn btn-secondary" style="padding: 8px 16px;" onclick="toggleEditMode()">Редактировать</button>
+                        </div>
+                        <div id="profileDisplay" style="display: block;">
+                            <div style="display: flex; flex-direction: column; gap: 16px;">
+                                <div>
+                                    <p style="font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px;">Название</p>
+                                    <p style="font-weight: 500;" id="displayCompanyName">ООО "Мой ресторан"</p>
+                                </div>
+                                <div>
+                                    <p style="font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px;">Контактное лицо</p>
+                                    <p style="font-weight: 500;" id="displayContactName">Иван Петров</p>
+                                </div>
+                                <div>
+                                    <p style="font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px;">Email</p>
+                                    <p style="font-weight: 500;" id="displayEmail">ivan@example.com</p>
+                                </div>
+                                <div>
+                                    <p style="font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px;">Телефон</p>
+                                    <p style="font-weight: 500;" id="displayPhone">+7 (999) 123-45-67</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="profileEdit" style="display: none;">
+                            <form style="display: flex; flex-direction: column; gap: 16px;" onsubmit="saveProfile(event)">
+                                <div class="form-group">
+                                    <label>Название компании</label>
+                                    <input type="text" id="editCompanyName" value="ООО 'Мой ресторан'" required style="padding: 10px; border: 1px solid rgba(174, 82, 64, 0.2); border-radius: 8px; font-size: 14px;">
+                                </div>
+                                <div class="form-group">
+                                    <label>Контактное лицо</label>
+                                    <input type="text" id="editContactName" value="Иван Петров" required style="padding: 10px; border: 1px solid rgba(174, 82, 64, 0.2); border-radius: 8px; font-size: 14px;">
+                                </div>
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="email" id="editEmail" value="ivan@example.com" required style="padding: 10px; border: 1px solid rgba(174, 82, 64, 0.2); border-radius: 8px; font-size: 14px;">
+                                </div>
+                                <div class="form-group">
+                                    <label>Телефон</label>
+                                    <input type="tel" id="editPhone" value="+7 (999) 123-45-67" required style="padding: 10px; border: 1px solid rgba(174, 82, 64, 0.2); border-radius: 8px; font-size: 14px;">
+                                </div>
+                                <div style="display: flex; gap: 10px;">
+                                    <button type="submit" class="btn btn-primary" onclick="saveProfile(event)">Сохранить изменения</button>
+                                    <button type="button" class="btn btn-secondary" onclick="toggleEditMode()">Отмена</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div style="background-color: var(--color-surface); padding: 30px; border-radius: 12px; border: 1px solid rgba(174, 82, 64, 0.15);">
+                        <h3 style="margin-bottom: 20px;">Статистика</h3>
+                        <div style="display: flex; flex-direction: column; gap: 16px;">
+                            <div style="background-color: var(--color-background); padding: 16px; border-radius: 8px;">
+                                <p style="font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px;">Всего заказов</p>
+                                <p style="font-size: 28px; font-weight: 600; color: var(--color-primary);">3</p>
+                            </div>
+                            <div style="background-color: var(--color-background); padding: 16px; border-radius: 8px;">
+                                <p style="font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px;">Общая экономия</p>
+                                <p style="font-size: 28px; font-weight: 600; color: var(--color-success);">1,450 ₽</p>
+                            </div>
+                            <div style="background-color: var(--color-background); padding: 16px; border-radius: 8px;">
+                                <p style="font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px;">Средняя экономия</p>
+                                <p style="font-size: 28px; font-weight: 600; color: var(--color-success);">16.7%</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-header">
+                    <h3>История ваших заказов</h3>
+                </div>
+                <div class="order-history" style="max-width: 800px; margin: 0 auto;">
+                    <div class="order-card">
+                        <div class="order-card-header">
+                            <h4>Заказ #1001</h4>
+                            <span class="status-badge status-delivered">✓ Доставлен</span>
+                        </div>
+                        <div class="order-card-date">Дата: 10 декабря 2025</div>
+                        <div class="order-card-details">
+                            <span>Товары: Томаты, огурцы, лук</span>
+                            <span>Сумма: 2,400 ₽ | Экономия: 480 ₽ (17%)</span>
+                        </div>
+                    </div>
+                    <div class="order-card">
+                        <div class="order-card-header">
+                            <h4>Заказ #1000</h4>
+                            <span class="status-badge status-pending">⏳ В пути</span>
+                        </div>
+                        <div class="order-card-date">Дата: 8 декабря 2025</div>
+                        <div class="order-card-details">
+                            <span>Товары: Картофель, рис, яйцо</span>
+                            <span>Сумма: 3,100 ₽ | Экономия: 620 ₽ (17%)</span>
+                        </div>
+                    </div>
+                    <div class="order-card">
+                        <div class="order-card-header">
+                            <h4>Заказ #999</h4>
+                            <span class="status-badge status-delivered">✓ Доставлен</span>
+                        </div>
+                        <div class="order-card-date">Дата: 1 декабря 2025</div>
+                        <div class="order-card-details">
+                            <span>Товары: Мука пшеничная, сахар, соль</span>
+                            <span>Сумма: 1,900 ₽ | Экономия: 350 ₽ (16%)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <!-- Order Section -->
+    <section id="order" class="section">
+        <section class="dashboard-section">
+            <div class="container">
+                <div class="dashboard-header">
+                    <h2>Создать новый заказ</h2>
+                    <p>Заполните форму ниже, чтобы отправить заказ. Мы свяжемся с вами в течение 24 часов</p>
+                </div>
+                <div id="successMessage" class="success-message" style="max-width: 600px; margin: 0 auto 30px;">✓ Заказ успешно создан! Мы свяжемся с вами в течение 24 часов.</div>
+                <form class="order-form" onsubmit="submitOrder(event)" style="max-width: 600px; margin: 0 auto; background-color: var(--color-surface); padding: 30px; border-radius: 12px; border: 1px solid rgba(174, 82, 64, 0.15);">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label>Название заведения</label>
+                            <input type="text" placeholder="ООО 'Мой ресторан'" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Контактное лицо</label>
+                            <input type="text" placeholder="Иван Петров" required>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" placeholder="ivan@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Телефон</label>
+                            <input type="tel" placeholder="+7 (999) 123-45-67" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Тип доставки</label>
+                        <select required>
+                            <option>Разовая доставка (1900-2400 ₽)</option>
+                            <option>Подписка на месяц (10-15% скидка)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Описание заказа</label>
+                        <textarea placeholder="Укажите требуемые товары и количество" rows="4"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Отправить заказ</button>
+                </form>
+            </div>
+        </section>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 LogCoop. Платформа логистической кооперации для МСП.</p>
+            <p style="font-size: 12px; margin-top: 16px;">Создаем экономию на масштабе для малого и среднего бизнеса</p>
+        </div>
+    </footer>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+
+            // Remove active class from all nav items
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+
+            // Show selected section
+            const selectedSection = document.getElementById(sectionId);
+            if (selectedSection) {
+                selectedSection.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // Add active class to clicked nav item
+            event.target.classList.add('active');
+        }
+
+        function switchTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(tab => tab.classList.remove('active'));
+
+            // Remove active class from all tabs
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            tabBtns.forEach(btn => btn.classList.remove('active'));
+
+            // Show selected tab
+            const selectedTab = document.getElementById(tabName);
+            if (selectedTab) {
+                selectedTab.classList.add('active');
+            }
+
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        function submitOrder(event) {
+            event.preventDefault();
+            const successMessage = document.getElementById('successMessage');
+            successMessage.style.display = 'block';
+            
+            // Clear form
+            event.target.reset();
+
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        function showLoginForm() {
+            alert('Функция входа будет доступна в полной версии платформы');
+        }
+
+        function showInfo() {
+            alert('LogCoop - платформа логистической кооперации для МСП\n\nОсновные преимущества:\n✓ Снижение Cost per Stop на 25-30%\n✓ Объединение спроса 479 МСП\n✓ Экономия 420 млн ₽/год в регионе\n✓ OTIF ≥ 85%\n✓ Retention ≥ 80%');
+        }
+
+        function toggleEditMode() {
+            const profileDisplay = document.getElementById('profileDisplay');
+            const profileEdit = document.getElementById('profileEdit');
+            
+            if (profileDisplay.style.display === 'none') {
+                profileDisplay.style.display = 'block';
+                profileEdit.style.display = 'none';
+            } else {
+                profileDisplay.style.display = 'none';
+                profileEdit.style.display = 'block';
+            }
+        }
+
+        function saveProfile(event) {
+            event.preventDefault();
+            
+            const companyName = document.getElementById('editCompanyName').value;
+            const contactName = document.getElementById('editContactName').value;
+            const email = document.getElementById('editEmail').value;
+            const phone = document.getElementById('editPhone').value;
+            
+            document.getElementById('displayCompanyName').textContent = companyName;
+            document.getElementById('displayContactName').textContent = contactName;
+            document.getElementById('displayEmail').textContent = email;
+            document.getElementById('displayPhone').textContent = phone;
+            
+            toggleEditMode();
+            
+            alert('✓ Профиль успешно сохранён!');
+        }
+    </script>
+</body>
+</html>
